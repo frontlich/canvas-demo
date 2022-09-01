@@ -28,5 +28,11 @@ jobs:
       - name: Install dep
         run: pnpm install
 
+      - name: GitName
+        run: git config --global user.name frontlich
+
+      - name: GitEmail
+        run: git config --global user.email frontlich@163.com
+
       - name: Deploy
         run: npm run deploy
