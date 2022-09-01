@@ -7,7 +7,7 @@ import "./index.css";
 const Demo1 = lazy(() => import("./pages/demo1"));
 
 const App = () => (
-  <HashRouter basename="canvas-demo">
+  <HashRouter>
     <Routes>
       <Route
         path="demo1"
