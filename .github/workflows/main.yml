@@ -34,5 +34,8 @@ jobs:
       - name: GitEmail
         run: git config --global user.email frontlich@163.com
 
+      - name: SetUrl
+        run: git remote set-url origin https://github.com/frontlich/canvas-demo.git
+
       - name: Deploy
         run: npm run deploy
