@@ -2,8 +2,6 @@ import { defaultConfig } from "./config";
 
 const { size: INITIAL_SIZE, colors } = defaultConfig;
 
-type Point = [number, number];
-
 /**
  * @desc 二阶贝塞尔
  * @param {number} t 当前百分比

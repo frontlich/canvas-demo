@@ -5,6 +5,7 @@ import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
 import "./index.css";
 
 const Demo1 = lazy(() => import("./pages/demo1"));
+const Demo2 = lazy(() => import("./pages/fireworks"));
 
 const App = () => (
   <HashRouter>
@@ -14,6 +15,14 @@ const App = () => (
         element={
           <Suspense>
             <Demo1 />
+          </Suspense>
+        }
+      />
+      <Route
+        path="demo2"
+        element={
+          <Suspense>
+            <Demo2 />
           </Suspense>
         }
       />

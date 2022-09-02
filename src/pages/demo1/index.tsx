@@ -11,10 +11,13 @@ export default memo(() => {
       const ctx = ref.current.getContext("2d");
 
       let isStart = false;
-      let point: [number, number] = [0, 0];
+      let point: Point = [0, 0];
       let timer: number;
 
       const onStart = (e: MouseEvent) => {
+        if (ref.current) {
+          ref.current.style.cursor = "none";
+        }
         isStart = true;
         point = [
           e.clientX - defaultConfig.size / 2,
@@ -26,6 +29,9 @@ export default memo(() => {
       };
 
       const onEnd = () => {
+        if (ref.current) {
+          ref.current.style.cursor = "default";
+        }
         isStart = false;
         clearInterval(timer);
       };
@@ -43,10 +49,12 @@ export default memo(() => {
       document.addEventListener("mousedown", onStart);
       document.addEventListener("mouseup", onEnd);
       document.addEventListener("mousemove", draw);
+      document.addEventListener("contextmenu", onEnd);
 
       return () => {
         document.removeEventListener("mousedown", onStart);
         document.removeEventListener("mouseup", onEnd);
+        document.removeEventListener("contextmenu", onEnd);
         document.removeEventListener("mousemove", draw);
       };
     }
