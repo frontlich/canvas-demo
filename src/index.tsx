@@ -1,15 +1,32 @@
 import { lazy, Suspense } from "react";
 import ReactDOM from "react-dom/client";
-import { HashRouter, Navigate, Route, Routes } from "react-router-dom";
+import { HashRouter, Link, Route, Routes } from "react-router-dom";
 
 import "./index.css";
 
 const Demo1 = lazy(() => import("./pages/demo1"));
-const Demo2 = lazy(() => import("./pages/fireworks"));
+const Demo2 = lazy(() => import("./pages/demo2"));
+const Demo3 = lazy(() => import("./pages/fireworks"));
 
 const App = () => (
   <HashRouter>
     <Routes>
+      <Route
+        index
+        element={
+          <div className="navBtnBox">
+            <Link className="navBtn" to="demo1">
+              demo1
+            </Link>
+            <Link className="navBtn" to="demo2">
+              demo2
+            </Link>
+            <Link className="navBtn" to="demo3">
+              fireworks
+            </Link>
+          </div>
+        }
+      />
       <Route
         path="demo1"
         element={
@@ -26,7 +43,14 @@ const App = () => (
           </Suspense>
         }
       />
-      <Route index element={<Navigate to="demo1" />} />
+      <Route
+        path="demo3"
+        element={
+          <Suspense>
+            <Demo3 />
+          </Suspense>
+        }
+      />
       <Route path="*" element={<div>该页面不存在</div>} />
     </Routes>
   </HashRouter>

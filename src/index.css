@@ -7,3 +7,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow: hidden;
 }
+
+.navBtnBox {
+  background: #000;
+  min-height: 100vh;
+}
+
+.navBtnBox .navBtn {
+  display: inline-block;
+  margin: 20px;
+  color: #fff;
+}
