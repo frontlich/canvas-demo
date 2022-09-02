@@ -83,7 +83,7 @@ const drawParticle = (
       ctx.fillStyle = "#000";
       ctx.fill();
       ctx.closePath();
-      draw(t + 0.04);
+      draw(t + 0.02);
     });
   };
 
@@ -95,9 +95,9 @@ const drawBoom = (
   point: Point,
   color: string
 ) => {
-  let speed = 30;
+  let speed = 60;
 
-  for (let i = 5; i < speed; i += 5) {
+  for (let i = 5; i < speed; i += 10) {
     for (let j = ((i % 2) / 20) * Math.PI; j < 2 * Math.PI; j += Math.PI / 10) {
       drawParticle(ctx, point, color, j, i);
     }

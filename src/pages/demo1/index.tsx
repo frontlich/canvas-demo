@@ -14,15 +14,12 @@ export default memo(() => {
       let point: Point = [0, 0];
       let timer: number;
 
-      const onStart = (e: MouseEvent) => {
+      const onStart = (p: Point) => {
         if (ref.current) {
           ref.current.style.cursor = "none";
         }
         isStart = true;
-        point = [
-          e.clientX - defaultConfig.size / 2,
-          e.clientY - defaultConfig.size / 2,
-        ];
+        point = [p[0] - defaultConfig.size / 2, p[1] - defaultConfig.size / 2];
         timer = window.setInterval(() => {
           ctx && drawRect(ctx, point);
         }, 100);
@@ -36,26 +33,50 @@ export default memo(() => {
         clearInterval(timer);
       };
 
-      const draw = (e: MouseEvent) => {
+      const draw = (p: Point) => {
         if (ctx && isStart) {
           point = [
-            e.clientX - defaultConfig.size / 2,
-            e.clientY - defaultConfig.size / 2,
+            p[0] - defaultConfig.size / 2,
+            p[1] - defaultConfig.size / 2,
           ];
           drawRect(ctx, point);
         }
       };
 
-      document.addEventListener("mousedown", onStart);
+      const touchStart = (e: TouchEvent) => {
+        e.preventDefault();
+        onStart([e.targetTouches[0].clientX, e.targetTouches[0].clientY]);
+      };
+
+      const mouseStart = (e: MouseEvent) => {
+        onStart([e.clientX, e.clientY]);
+      };
+
+      const touchMove = (e: TouchEvent) => {
+        e.preventDefault();
+        draw([e.targetTouches[0].clientX, e.targetTouches[0].clientY]);
+      };
+
+      const mouseMove = (e: MouseEvent) => {
+        draw([e.clientX, e.clientY]);
+      };
+
+      document.addEventListener("touchstart", touchStart, { passive: false });
+      document.addEventListener("touchmove", touchMove, { passive: false });
+      document.addEventListener("touchend", onEnd);
+      document.addEventListener("mousedown", mouseStart);
       document.addEventListener("mouseup", onEnd);
-      document.addEventListener("mousemove", draw);
+      document.addEventListener("mousemove", mouseMove);
       document.addEventListener("contextmenu", onEnd);
 
       return () => {
-        document.removeEventListener("mousedown", onStart);
+        document.removeEventListener("touchstart", touchStart);
+        document.removeEventListener("touchmove", touchMove);
+        document.removeEventListener("touchend", onEnd);
+        document.removeEventListener("mousedown", mouseStart);
         document.removeEventListener("mouseup", onEnd);
         document.removeEventListener("contextmenu", onEnd);
-        document.removeEventListener("mousemove", draw);
+        document.removeEventListener("mousemove", mouseMove);
       };
     }
   }, []);
