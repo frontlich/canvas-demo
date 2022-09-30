@@ -1,3 +1,5 @@
+import { getDistance } from "../../utils/distance";
+
 const radius = 2, // 粒子半径大小
   repelRadius = 100, // 排斥圈半径
   speed = [0.01, 0.1], // 排斥速度
@@ -26,12 +28,6 @@ const clearPoint = (ctx: CanvasRenderingContext2D, point: Point) => {
   ctx.fillStyle = "#000";
   ctx.fill();
   ctx.closePath();
-};
-
-const getDistance = (p1: Point, p2: Point) => {
-  const offsetX = Math.abs(p1[0] - p2[0]),
-    offsetY = Math.abs(p1[1] - p2[1]);
-  return Math.sqrt(offsetX * offsetX + offsetY * offsetY);
 };
 
 const movePoint = (target: Point, p: Point, i: number) => {

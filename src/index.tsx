@@ -7,6 +7,7 @@ import "./index.css";
 const Demo1 = lazy(() => import("./pages/demo1"));
 const Demo2 = lazy(() => import("./pages/demo2"));
 const Demo3 = lazy(() => import("./pages/fireworks"));
+const Demo4 = lazy(() => import("./pages/gobang"));
 
 const App = () => (
   <HashRouter>
@@ -23,6 +24,9 @@ const App = () => (
             </Link>
             <Link className="navBtn" to="demo3">
               fireworks
+            </Link>
+            <Link className="navBtn" to="demo4">
+              gobang
             </Link>
           </div>
         }
@@ -48,6 +52,14 @@ const App = () => (
         element={
           <Suspense>
             <Demo3 />
+          </Suspense>
+        }
+      />
+      <Route
+        path="demo4"
+        element={
+          <Suspense>
+            <Demo4 />
           </Suspense>
         }
       />
