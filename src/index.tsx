@@ -8,6 +8,7 @@ const Demo1 = lazy(() => import("./pages/demo1"));
 const Demo2 = lazy(() => import("./pages/demo2"));
 const Demo3 = lazy(() => import("./pages/fireworks"));
 const Demo4 = lazy(() => import("./pages/gobang"));
+const WellGame = lazy(() => import("./pages/well-game"));
 
 const App = () => (
   <HashRouter>
@@ -27,6 +28,9 @@ const App = () => (
             </Link>
             <Link className="navBtn" to="demo4">
               gobang
+            </Link>
+            <Link className="navBtn" to="well">
+              井字棋
             </Link>
           </div>
         }
@@ -60,6 +64,14 @@ const App = () => (
         element={
           <Suspense>
             <Demo4 />
+          </Suspense>
+        }
+      />
+      <Route
+        path="well"
+        element={
+          <Suspense>
+            <WellGame />
           </Suspense>
         }
       />
