@@ -1,91 +1,62 @@
-import { useState } from "react";
+import { memo, useMemo, useState } from "react";
 import { robot } from "./robot";
 
-type ISquare = "X" | "O";
+type ISquare = "X" | "O" | null;
 type Squares = ISquare[];
-interface SquareProps {
-  value: ISquare;
-  onSquareClick: () => void;
-}
 
-function Square({ value, onSquareClick }: SquareProps) {
-  return (
-    <div className="well-game-square" onClick={onSquareClick}>
-      {value}
-    </div>
-  );
-}
+export default memo(() => {
+  const [steps, setSteps] = useState<number[]>([]);
 
-interface BoardProps {
-  squares: Squares;
-  onPlay: (nextSquares: Squares) => void;
-}
-
-function Board({ squares, onPlay }: BoardProps) {
-  const winner = calculateWinner(squares);
-
-  function handleClick(i: number) {
-    if (winner || squares[i]) {
-      return;
+  const [currentSquares, winner] = useMemo(() => {
+    const current = Array(9).fill(null);
+    steps.forEach((step, i) => {
+      current[step] = i % 2 === 0 ? "X" : "O";
+    });
+    const winner = calculateWinner(current);
+    const len = steps.length;
+    if (!winner && len < 9 && len % 2 === 1) {
+      const robotStep = robot.next(steps[len - 1]);
+      setSteps([...steps, robotStep]);
     }
-    const robotIndex = robot.next(i);
-    const nextSquares = squares.slice();
-    nextSquares[robotIndex] = "O";
-    nextSquares[i] = "X";
-    onPlay(nextSquares);
-  }
+    return [current, winner];
+  }, [steps]);
 
-  let status;
-  if (winner) {
-    status = "Winner: " + winner;
-  } else {
-    status = "Next player: X";
-  }
+  const nextPlayer = steps.length % 2 === 0 ? "X" : "O";
 
   return (
-    <>
-      <div>{status}</div>
-      <div className="well-game-board">
-        <Square value={squares[0]} onSquareClick={() => handleClick(0)} />
-        <Square value={squares[1]} onSquareClick={() => handleClick(1)} />
-        <Square value={squares[2]} onSquareClick={() => handleClick(2)} />
-        <Square value={squares[3]} onSquareClick={() => handleClick(3)} />
-        <Square value={squares[4]} onSquareClick={() => handleClick(4)} />
-        <Square value={squares[5]} onSquareClick={() => handleClick(5)} />
-        <Square value={squares[6]} onSquareClick={() => handleClick(6)} />
-        <Square value={squares[7]} onSquareClick={() => handleClick(7)} />
-        <Square value={squares[8]} onSquareClick={() => handleClick(8)} />
-      </div>
-    </>
-  );
-}
-
-export default function Game() {
-  const [history, setHistory] = useState([Array(9).fill(null)]);
-  const [currentMove, setCurrentMove] = useState(0);
-  const currentSquares = history[currentMove];
-
-  function handlePlay(nextSquares: Squares) {
-    const nextHistory = [...history.slice(0, currentMove + 1), nextSquares];
-    setHistory(nextHistory);
-    setCurrentMove(nextHistory.length - 1);
-  }
-
-  return (
-    <>
+    <div style={{ padding: 20 }}>
       <button
         onClick={() => {
-          setHistory([Array(9).fill(null)]);
-          setCurrentMove(0);
           robot.restart();
+          setSteps([]);
         }}
       >
-        重新开始
+        restart
       </button>
-      <Board squares={currentSquares} onPlay={handlePlay} />
-    </>
+      <div>
+        {winner
+          ? `the winner is ${winner}`
+          : steps.length === 9
+          ? "stalemate"
+          : `next player: ${nextPlayer}`}
+      </div>
+      <div className="well-game-board">
+        {currentSquares.map((value, i) => (
+          <div
+            className="well-game-square"
+            key={i}
+            onClick={() => {
+              if (winner || value) return;
+              setSteps([...steps, i]);
+            }}
+          >
+            {value}
+          </div>
+        ))}
+      </div>
+    </div>
   );
-}
+});
 
 function calculateWinner(squares: Squares) {
   const lines = [
